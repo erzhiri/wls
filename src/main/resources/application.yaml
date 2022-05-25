@@ -1,0 +1,50 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /wls
+
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/wls # ?useSSL=false&serverTimeZone=Asia/ShangHai
+    username: root
+    password: root
+  redis:
+    host: 119.3.143.200
+    port: 6379
+    timeout: 10000
+    database: 0
+    password: erzhiri
+    lettuce:
+      pool:
+        max-active: 20
+        max-wait: -1
+        max-idle: 5
+        min-idle: 0
+
+logging:
+  level:
+    root: info
+
+mybatis-plus:
+  type-aliases-package: com.erzhiri.wls.model
+  mapper-locations: mapper/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+# jwt
+jwt:
+  # jwt 存储的请求头
+  tokenHeader: wls
+  # jwt 加密使用的密钥
+  secret: wls-secret
+  # jwt 超时时间 1 天 24*60*60 = 86400
+  expiration: 86400
+  # jwt 敷在中拿到开头
+  tokenHead: Bearer
+  # redis token 存储字段名
+  redisToken: wls-token

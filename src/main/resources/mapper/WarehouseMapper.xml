@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erzhiri.wls.mapper.WarehouseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.erzhiri.wls.model.entity.Warehouse">
+        <id column="warehouse_id" property="warehouseId" />
+        <result column="free_position_number" property="freePositionNumber" />
+        <result column="alarm_number" property="alarmNumber" />
+        <result column="embed" property="embed" />
+        <result column="all_position_number" property="allPositionNumber" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        warehouse_id, free_position_number, alarm_number, embed, all_position_number
+    </sql>
+    <select id="selectFreePositionNumber" resultType="java.lang.Integer">
+        select free_position_number
+        from warehouse
+        order by warehouse_id
+    </select>
+    <select id="selectUsedPositionNumber" resultType="java.lang.Integer">
+        select (all_position_number-free_position_number)
+        from warehouse
+        order by warehouse_id
+    </select>
+
+</mapper>

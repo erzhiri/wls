@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erzhiri.wls.mapper.BoxMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.erzhiri.wls.model.entity.Box">
+        <result column="id" property="id" />
+        <result column="length" property="length" />
+        <result column="width" property="width" />
+        <result column="height" property="height" />
+        <result column="embed" property="embed" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, length, width, height, embed
+    </sql>
+
+</mapper>

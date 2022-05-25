@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erzhiri.wls.mapper.WarehousePositionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.erzhiri.wls.model.entity.WarehousePosition">
+        <id column="position" property="position" />
+        <result column="goods_id" property="goodsId" />
+        <result column="free" property="free" />
+        <result column="embed" property="embed" />
+        <result column="warehouse" property="warehouse" />
+    </resultMap>
+    
+    <resultMap id="PositionMap" type="com.erzhiri.wls.model.vo.PositionVO">
+        <id column="warehouse" property="value"/>
+        <result column="label" property="label"/>
+        <collection property="children" javaType="ArrayList" column="warehouse" select="selectPositionCount"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        position, goods_id, free, embed, warehouse
+    </sql>
+    <update id="setNullByGoodsId">
+        update warehouse_position
+        set free = 1, goods_id = null
+        where goods_id = #{goodsId}
+    </update>
+    <select id="getPositionMap" resultMap="PositionMap">
+        select DISTINCT warehouse, concat(warehouse, '号仓库') label
+        from warehouse_position
+        where embed = 1
+    </select>
+    <select id="selectPositionCount" resultType="com.erzhiri.wls.model.vo.PositionChildren">
+        select position value, concat('仓位', position) label, IF(free='1', false , true) disabled
+        from warehouse_position
+        where embed = 1 and warehouse = #{warehouse}
+    </select>
+    
+    
+    
+    <select id="selectUseByWarehouse" resultType="java.lang.Integer">
+        select count(*)
+        from warehouse_position
+        where embed = 1 and free = 1
+        group by warehouse
+        order by warehouse
+    </select>
+
+
+</mapper>

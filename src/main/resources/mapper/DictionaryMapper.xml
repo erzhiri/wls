@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erzhiri.wls.mapper.DictionaryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.erzhiri.wls.model.entity.Dictionary">
+        <id column="dictionary_id" property="dictionaryId"/>
+        <result column="description" property="description"/>
+        <result column="previous" property="previous"/>
+        <result column="embed" property="embed"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        dictionary_id
+        , description, previous, embed
+    </sql>
+    <select id="selectStatusInfo" resultType="com.erzhiri.wls.model.dto.StatusDTO">
+        select dictionary_id value,
+               description   label
+        from dictionary
+        where embed = 1
+    </select>
+
+</mapper>

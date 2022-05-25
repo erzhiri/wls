@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.erzhiri.wls.mapper.CommodityLogisticsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.erzhiri.wls.model.entity.CommodityLogistics">
+        <result column="customer_id" property="customerId"/>
+        <result column="enter_store_time" property="enterStoreTime"/>
+        <result column="out_store_time" property="outStoreTime"/>
+        <result column="warehouse_id" property="warehouseId"/>
+        <!--        <result column="embed" property="embed"/>-->
+        <result column="status" property="status"/>
+        <result column="location_from" property="locationFrom"/>
+        <result column="location_to" property="locationTo"/>
+        <result column="location_current" property="locationCurrent"/>
+        <result column="trans_code" property="transCode"/>
+        <result column="goods_name" property="goodsName"/>
+        <result column="weight" property="weight"/>
+        <result column="box" property="box"/>
+        <result column="id" property="id"/>
+        <result column="volume" property="volume"/>
+        <result column="position" property="position"/>
+        <result column="username" property="username"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        cl
+        .
+        customer_id
+        , cl.enter_store_time, cl.out_store_time, cl.warehouse_id, cl.embed, cl.status, cl.location_from, cl.location_to, cl.remark, cl.trans_code, cl.goods_name, cl.weight, cl.box, cl.id
+    </sql>
+    <select id="selectPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"></include>,
+        box.volume,
+        wp.position,
+        username
+        from commodity_logistics cl
+        left join box on cl.box = box.id and box.embed = 1
+        left join warehouse_position wp on cl.id = wp.goods_id and wp.embed = 1
+            left join customer on cl.customer_id = customer.customer_id and customer.embed = 1
+        <where>
+            <if test=" condition.status != null">
+                and status = #{condition.status}
+            </if>
+            <if test=" condition.customerId != null" >
+                and cl.customer_id = #{condition.customerId}
+            </if>
+            <if test="condition.fromDate != null">
+                and cl.enter_store_time <![CDATA[ >= ]]> #{condition.fromDate}
+            </if>
+            <if test="condition.toDate != null">
+                and cl.enter_store_time  <![CDATA[ <= ]]> #{condition.toDate}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectByIds" resultType="com.erzhiri.wls.model.entity.CommodityLogistics">
+        select
+        <include refid="Base_Column_List"></include>,
+        box.volume,
+        wp.position,
+        username
+        from commodity_logistics cl
+        left join box on cl.box = box.id and box.embed = 1
+        left join warehouse_position wp on cl.id = wp.goods_id and wp.embed = 1
+        left join customer on cl.customer_id = customer.customer_id and customer.embed = 1
+        <where>
+            <if test="ids != null">
+                and cl.id in
+                <foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+
+            </if>
+        </where>
+
+    </select>
+
+</mapper>
